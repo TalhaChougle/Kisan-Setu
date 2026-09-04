@@ -78,7 +78,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 // ── Start ──────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`\n🚀 KisanSetu backend running on port ${PORT}`);
   console.log(`   NODE_ENV: ${process.env.NODE_ENV}`);
   console.log(`   API: http://localhost:${PORT}/api`);
