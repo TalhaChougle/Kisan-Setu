@@ -1,0 +1,356 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ──────────────────────────────────────────────────────────────────
+
+enum Role {
+  FARMER
+  BUYER
+  ADMIN
+}
+
+enum Grade {
+  A
+  B
+  C
+}
+
+enum LotStatus {
+  ACTIVE
+  LOCKED
+  CLOSED
+  WITHDRAWN
+}
+
+enum OfferStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  COUNTERED
+  EXPIRED
+}
+
+enum DealStatus {
+  CONFIRMED
+  FARMER_CONFIRMED
+  BUYER_CONFIRMED
+  COMPLETED
+  DISPUTED
+  CANCELLED
+  FLAGGED
+}
+
+enum EscrowStatus {
+  HELD
+  RELEASED
+  REFUNDED
+}
+
+enum PayoutStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  CLOSED
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum BusinessProofType {
+  GST_CERTIFICATE
+  MANDI_LICENCE
+  EXPORT_LICENCE
+  FPO_REGISTRATION
+}
+
+enum NotificationChannel {
+  SMS
+  WHATSAPP
+  IN_APP
+}
+
+enum AuditAction {
+  LOT_CREATED
+  LOT_UPDATED
+  LOT_WITHDRAWN
+  LOT_LOCKED
+  OFFER_CREATED
+  OFFER_ACCEPTED
+  OFFER_REJECTED
+  OFFER_COUNTERED
+  DEAL_CONFIRMED
+  DEAL_FARMER_CONFIRMED
+  DEAL_BUYER_CONFIRMED
+  DEAL_COMPLETED
+  DEAL_FLAGGED
+  DEAL_CANCELLED
+  ESCROW_HELD
+  ESCROW_RELEASED
+  ESCROW_REFUNDED
+  DISPUTE_RAISED
+  DISPUTE_RESOLVED
+  DISPUTE_CLOSED
+  USER_REGISTERED
+  USER_KYC_VERIFIED
+  USER_BUSINESS_VERIFIED
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model Farmer {
+  farmer_id        String   @id @default(uuid())
+  name             String
+  mobile           String   @unique
+  mobile_verified  Boolean  @default(false)
+  aadhaar_verified Boolean  @default(false)
+  aadhaar_verified_at DateTime?
+  village          String?
+  district         String?
+  state            String   @default("Maharashtra")
+  location         String?  // "lat,lng"
+  language_pref    String   @default("en")
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  lots             Lot[]
+  deals            Deal[]
+  otps             OtpVerification[]
+}
+
+model Buyer {
+  buyer_id              String              @id @default(uuid())
+  name                  String
+  mobile                String              @unique
+  mobile_verified       Boolean             @default(false)
+  aadhaar_verified      Boolean             @default(false)
+  aadhaar_verified_at   DateTime?
+  business_proof_type   BusinessProofType?
+  business_proof_url    String?
+  verification_status   VerificationStatus  @default(PENDING)
+  verified_at           DateTime?
+  export_eligible       Boolean             @default(false)
+  created_at            DateTime            @default(now())
+  updated_at            DateTime            @updatedAt
+
+  offers               Offer[]
+  deals                Deal[]
+  otps                 OtpVerification[]
+}
+
+model Admin {
+  admin_id    String   @id @default(uuid())
+  name        String
+  mobile      String   @unique
+  email       String?  @unique
+  password_hash String
+  role        String   @default("admin")
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  otps        OtpVerification[]
+}
+
+model OtpVerification {
+  id          String   @id @default(uuid())
+  mobile      String
+  otp         String
+  user_type   Role
+  farmer_id   String?
+  buyer_id    String?
+  admin_id    String?
+  verified    Boolean  @default(false)
+  expires_at  DateTime
+  created_at  DateTime @default(now())
+
+  farmer      Farmer?  @relation(fields: [farmer_id], references: [farmer_id])
+  buyer       Buyer?   @relation(fields: [buyer_id], references: [buyer_id])
+  admin       Admin?   @relation(fields: [admin_id], references: [admin_id])
+}
+
+model Lot {
+  lot_id          String    @id @default(uuid())
+  farmer_id       String
+  commodity       String
+  variety         String?
+  grade           Grade
+  quantity        Float     // in quintals
+  photo_url       String?
+  location        String    // "lat,lng" or village name
+  village         String?
+  district        String?
+  state           String    @default("Maharashtra")
+  season          String    // kharif/rabi/zaid
+  harvest_date    DateTime?
+  organic_flag    Boolean   @default(false)
+  asking_price    Float     // per quintal in INR
+  msp_at_listing  Float?    // MSP price captured at listing time
+  mandi_at_listing Float?   // mandi price captured at listing time
+  export_eligible Boolean   @default(false)
+  status          LotStatus @default(ACTIVE)
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  farmer          Farmer    @relation(fields: [farmer_id], references: [farmer_id])
+  offers          Offer[]
+  deal            Deal?
+  logistics       LogisticsOption[]
+
+  @@index([status])
+  @@index([commodity, district])
+}
+
+model PriceIndex {
+  price_id      String   @id @default(uuid())
+  commodity     String
+  variety       String?
+  region        String   // district
+  state         String   @default("Maharashtra")
+  date          DateTime @db.Date
+  msp_price     Float?   // per quintal INR
+  mandi_price   Float    // per quintal INR
+  source        String   @default("mock_agmarknet")
+  created_at    DateTime @default(now())
+
+  @@index([commodity, region, date])
+  @@unique([commodity, region, date, variety])
+}
+
+model Offer {
+  offer_id    String      @id @default(uuid())
+  lot_id      String
+  buyer_id    String
+  price       Float       // per quintal INR
+  quantity    Float?      // optional partial lot
+  message     String?
+  status      OfferStatus @default(PENDING)
+  parent_id   String?     // for counter-offers
+  msp_at_offer Float?     // govt ref price at time of offer
+  timestamp   DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+
+  lot         Lot         @relation(fields: [lot_id], references: [lot_id])
+  buyer       Buyer       @relation(fields: [buyer_id], references: [buyer_id])
+  parent      Offer?      @relation("CounterOffers", fields: [parent_id], references: [offer_id])
+  children    Offer[]     @relation("CounterOffers")
+}
+
+model Deal {
+  deal_id               String     @id @default(uuid())
+  lot_id                String     @unique
+  buyer_id              String
+  farmer_id             String
+  final_price           Float      // per quintal INR
+  quantity              Float      // quintals
+  total_amount          Float      // final_price * quantity
+  token                 String     @unique
+  handoff_window_start  DateTime
+  handoff_window_end    DateTime
+  farmer_confirmed_at   DateTime?
+  buyer_confirmed_at    DateTime?
+  confirmed_quantity    Float?
+  confirmed_grade       Grade?
+  export_eligible       Boolean    @default(false)
+  status                DealStatus @default(CONFIRMED)
+  created_at            DateTime   @default(now())
+  updated_at            DateTime   @updatedAt
+
+  lot                   Lot        @relation(fields: [lot_id], references: [lot_id])
+  buyer                 Buyer      @relation(fields: [buyer_id], references: [buyer_id])
+  farmer                Farmer     @relation(fields: [farmer_id], references: [farmer_id])
+  transaction           Transaction?
+  disputes              Dispute[]
+
+  @@index([status])
+}
+
+model Transaction {
+  transaction_id    String       @id @default(uuid())
+  deal_id           String       @unique
+  amount            Float
+  commission_rate   Float        @default(0.025)
+  commission_amount Float
+  farmer_payout     Float
+  escrow_status     EscrowStatus @default(HELD)
+  payout_status     PayoutStatus @default(PENDING)
+  gateway_ref       String?      // mock payment gateway reference
+  held_at           DateTime     @default(now())
+  released_at       DateTime?
+  created_at        DateTime     @default(now())
+  updated_at        DateTime     @updatedAt
+
+  deal              Deal         @relation(fields: [deal_id], references: [deal_id])
+}
+
+model Dispute {
+  dispute_id    String        @id @default(uuid())
+  deal_id       String
+  raised_by     String        // user_id (farmer or buyer)
+  raised_by_type Role
+  reason        String
+  description   String?
+  evidence_url  String?
+  resolution    String?
+  resolved_by   String?       // admin_id
+  status        DisputeStatus @default(OPEN)
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+
+  deal          Deal          @relation(fields: [deal_id], references: [deal_id])
+}
+
+model Notification {
+  notification_id String              @id @default(uuid())
+  user_id         String
+  user_type       Role
+  channel         NotificationChannel
+  message         String
+  metadata        Json?
+  sent_at         DateTime            @default(now())
+  delivered       Boolean             @default(false)
+
+  @@index([user_id, user_type])
+}
+
+model LogisticsOption {
+  id            String   @id @default(uuid())
+  name          String
+  type          String   // transport / cold_storage
+  contact       String?
+  address       String?
+  district      String
+  state         String   @default("Maharashtra")
+  commodities   String[] // relevant commodities
+  lot_id        String?
+  created_at    DateTime @default(now())
+
+  lot           Lot?     @relation(fields: [lot_id], references: [lot_id])
+}
+
+model AuditLog {
+  id          String      @id @default(uuid())
+  action      AuditAction
+  entity_type String      // Lot / Offer / Deal / Dispute / User
+  entity_id   String
+  actor_id    String?
+  actor_type  Role?
+  metadata    Json?       // snapshot of prices shown, state changes, etc.
+  created_at  DateTime    @default(now())
+
+  @@index([entity_id])
+  @@index([created_at])
+}

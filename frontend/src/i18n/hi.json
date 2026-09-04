@@ -1,0 +1,258 @@
+{
+  "app_name": "किसानसेतु",
+  "tagline": "किसानों को सीधे खरीदारों से जोड़ना",
+  "govt_label": "महाराष्ट्र सरकार की पहल",
+
+  "nav": {
+    "dashboard": "डैशबोर्ड",
+    "my_lots": "मेरी फसलें",
+    "create_lot": "उत्पाद सूचीबद्ध करें",
+    "search_lots": "लॉट खोजें",
+    "my_offers": "मेरी पेशकश",
+    "my_deals": "मेरे सौदे",
+    "disputes": "विवाद",
+    "admin": "एडमिन पैनल",
+    "prices": "बाजार मूल्य",
+    "logout": "लॉगआउट",
+    "profile": "प्रोफ़ाइल"
+  },
+
+  "auth": {
+    "login_title": "किसानसेतु में लॉगिन करें",
+    "login_subtitle": "जारी रखने के लिए अपना मोबाइल नंबर दर्ज करें",
+    "mobile_label": "मोबाइल नंबर",
+    "mobile_placeholder": "10 अंकों का मोबाइल नंबर",
+    "role_label": "मैं हूँ",
+    "role_farmer": "किसान",
+    "role_buyer": "खरीदार / व्यापारी",
+    "role_admin": "सरकारी एडमिन",
+    "send_otp": "OTP भेजें",
+    "sending": "भेज रहे हैं...",
+    "otp_sent": "{{mobile}} पर OTP भेजा गया",
+    "otp_label": "OTP दर्ज करें",
+    "otp_placeholder": "6 अंकों का OTP",
+    "verify_otp": "सत्यापित करें और लॉगिन करें",
+    "verifying": "सत्यापित हो रहा है...",
+    "resend_otp": "OTP पुनः भेजें",
+    "dev_otp_hint": "Dev मोड: OTP है {{otp}}",
+    "name_label": "पूरा नाम",
+    "name_placeholder": "आपका पूरा नाम",
+    "welcome_back": "वापस स्वागत है, {{name}}!",
+    "kyc_required": "जारी रखने के लिए आधार e-KYC पूरा करें"
+  },
+
+  "kyc": {
+    "title": "आधार e-KYC सत्यापन",
+    "subtitle": "आपका आधार नंबर केवल पहचान सत्यापन के लिए उपयोग किया जाता है — संग्रहीत नहीं किया जाता।",
+    "aadhaar_label": "आधार नंबर",
+    "aadhaar_placeholder": "12 अंकों का आधार नंबर",
+    "verify_btn": "पहचान सत्यापित करें",
+    "verifying": "सत्यापित हो रहा है...",
+    "success": "पहचान सफलतापूर्वक सत्यापित हुई!",
+    "already_verified": "पहले से सत्यापित",
+    "skip": "अभी के लिए छोड़ें"
+  },
+
+  "business_proof": {
+    "title": "व्यापार सत्यापन",
+    "subtitle": "ऑफर देना शुरू करने के लिए अपना व्यापार प्रमाण अपलोड करें",
+    "type_label": "प्रमाण प्रकार",
+    "url_label": "दस्तावेज़ URL / फ़ाइल लिंक",
+    "url_placeholder": "https://...",
+    "submit": "सत्यापन के लिए जमा करें",
+    "submitting": "जमा हो रहा है...",
+    "success": "व्यापार प्रमाण जमा! आप अब एक सत्यापित खरीदार हैं।",
+    "types": {
+      "GST_CERTIFICATE": "GST प्रमाणपत्र",
+      "MANDI_LICENCE": "मंडी लाइसेंस",
+      "EXPORT_LICENCE": "निर्यात लाइसेंस",
+      "FPO_REGISTRATION": "FPO पंजीकरण"
+    }
+  },
+
+  "farmer": {
+    "dashboard_title": "किसान डैशबोर्ड",
+    "welcome": "स्वागत है, {{name}}",
+    "active_lots": "सक्रिय लॉट",
+    "pending_offers": "लंबित प्रस्ताव",
+    "active_deals": "सक्रिय सौदे",
+    "earnings": "कुल आय",
+    "create_lot_btn": "नया उत्पाद सूचीबद्ध करें",
+    "no_lots": "अभी तक कोई लॉट नहीं। अपना उत्पाद सूचीबद्ध करके शुरू करें।",
+    "lot_status": {
+      "ACTIVE": "सक्रिय",
+      "LOCKED": "सौदा प्रगति में",
+      "CLOSED": "बिक गया",
+      "WITHDRAWN": "वापस लिया गया"
+    }
+  },
+
+  "lot": {
+    "create_title": "अपना उत्पाद सूचीबद्ध करें",
+    "edit_title": "लॉट संपादित करें",
+    "commodity_label": "वस्तु",
+    "commodity_placeholder": "जैसे गेहूं, प्याज, सोयाबीन",
+    "variety_label": "किस्म",
+    "variety_placeholder": "जैसे HD-2967, नासिक रेड",
+    "grade_label": "ग्रेड",
+    "quantity_label": "मात्रा (क्विंटल)",
+    "asking_price_label": "मांग मूल्य (₹ / क्विंटल)",
+    "district_label": "जिला",
+    "season_label": "मौसम",
+    "harvest_date_label": "फसल की तारीख",
+    "organic_label": "जैविक उत्पाद",
+    "photo_label": "फोटो URL",
+    "submit_btn": "लॉट प्रकाशित करें",
+    "update_btn": "लॉट अपडेट करें",
+    "withdraw_btn": "लॉट वापस लें",
+    "msp_reference": "सरकारी MSP संदर्भ: ₹{{price}}/क्विं",
+    "mandi_reference": "आज का मंडी मूल्य: ₹{{price}}/क्विं",
+    "price_recommendation": "बाजार अंतर्दृष्टि",
+    "grades": { "A": "ग्रेड A (सर्वोत्तम)", "B": "ग्रेड B", "C": "ग्रेड C" },
+    "seasons": { "kharif": "खरीफ", "rabi": "रबी", "zaid": "जायद" },
+    "organic_badge": "जैविक",
+    "view_offers": "प्रस्ताव देखें ({{count}})",
+    "no_offers": "अभी तक कोई प्रस्ताव नहीं"
+  },
+
+  "buyer": {
+    "dashboard_title": "खरीदार डैशबोर्ड",
+    "search_placeholder": "वस्तु, जिले से खोजें...",
+    "filter_btn": "फ़िल्टर",
+    "verified_badge": "सत्यापित खरीदार",
+    "unverified_notice": "ऑफर देने और किसान संपर्क देखने के लिए सत्यापन पूरा करें।",
+    "offers_made": "किए गए प्रस्ताव",
+    "active_deals": "सक्रिय सौदे"
+  },
+
+  "offer": {
+    "make_offer": "प्रस्ताव दें",
+    "your_price": "आपका प्रस्ताव मूल्य (₹/क्विं)",
+    "message": "किसान को संदेश",
+    "message_placeholder": "वैकल्पिक — अपनी आवश्यकताएं बताएं",
+    "submit": "प्रस्ताव जमा करें",
+    "accept": "प्रस्ताव स्वीकार करें",
+    "reject": "अस्वीकार करें",
+    "counter": "काउंटर ऑफर",
+    "counter_price": "आपका काउंटर मूल्य (₹/क्विं)",
+    "govt_ref": "सरकारी संदर्भ मूल्य: ₹{{price}}/क्विं",
+    "status": {
+      "PENDING": "लंबित",
+      "ACCEPTED": "स्वीकृत",
+      "REJECTED": "अस्वीकृत",
+      "COUNTERED": "काउंटर किया",
+      "EXPIRED": "समाप्त"
+    }
+  },
+
+  "deal": {
+    "title": "सौदे का विवरण",
+    "token": "डील टोकन",
+    "token_hint": "भौतिक पिकअप पर हस्तांतरण की पुष्टि के लिए यह टोकन दिखाएं",
+    "confirm_handoff": "हस्तांतरण की पुष्टि करें",
+    "quantity_confirmed": "पुष्टि मात्रा (क्विंटल)",
+    "grade_confirmed": "पुष्टि ग्रेड",
+    "handoff_window": "हस्तांतरण विंडो",
+    "status": {
+      "CONFIRMED": "पुष्टि — हस्तांतरण प्रतीक्षारत",
+      "FARMER_CONFIRMED": "किसान पुष्टि — खरीदार प्रतीक्षारत",
+      "BUYER_CONFIRMED": "खरीदार पुष्टि — किसान प्रतीक्षारत",
+      "COMPLETED": "पूर्ण",
+      "DISPUTED": "विवाद में",
+      "CANCELLED": "रद्द",
+      "FLAGGED": "समीक्षा के लिए फ्लैग"
+    },
+    "escrow_held": "एस्क्रो रखा: ₹{{amount}}",
+    "escrow_released": "भुगतान जारी: ₹{{amount}}"
+  },
+
+  "dispute": {
+    "raise_btn": "विवाद उठाएं",
+    "title": "विवाद विवरण",
+    "reason_label": "कारण",
+    "description_label": "विवरण",
+    "evidence_label": "प्रमाण URL (फोटो/दस्तावेज़)",
+    "submit_btn": "विवाद जमा करें",
+    "resolve_btn": "विवाद सुलझाएं",
+    "resolution_label": "समाधान नोट्स",
+    "action_label": "कार्रवाई",
+    "actions": {
+      "RELEASE_ESCROW": "किसान को जारी करें",
+      "REFUND_BUYER": "खरीदार को वापस करें",
+      "PARTIAL_RELEASE": "आंशिक निपटान"
+    },
+    "status": {
+      "OPEN": "खुला",
+      "UNDER_REVIEW": "समीक्षाधीन",
+      "RESOLVED": "हल किया गया",
+      "CLOSED": "बंद"
+    }
+  },
+
+  "price": {
+    "title": "बाजार मूल्य जानकारी",
+    "commodity_label": "वस्तु",
+    "region_label": "क्षेत्र",
+    "days_label": "अवधि",
+    "msp_line": "MSP",
+    "mandi_line": "मंडी मूल्य",
+    "trend_up": "↑ ऊपर जा रहा है",
+    "trend_down": "↓ नीचे जा रहा है",
+    "trend_stable": "→ स्थिर"
+  },
+
+  "admin": {
+    "dashboard_title": "सरकारी एडमिन डैशबोर्ड",
+    "total_farmers": "कुल किसान",
+    "total_buyers": "कुल खरीदार",
+    "active_lots": "सक्रिय लॉट",
+    "total_deals": "कुल सौदे",
+    "completed_deals": "पूर्ण सौदे",
+    "open_disputes": "खुले विवाद",
+    "transaction_volume": "लेनदेन मात्रा",
+    "avg_realisation": "औसत किसान प्राप्ति",
+    "fraud_flags": "धोखाधड़ी / विसंगति फ्लैग",
+    "fraud_desc": "खरीदार बार-बार MSP के 90% से कम प्रस्ताव दे रहे हैं",
+    "resolve_dispute": "हल करें",
+    "view_audit": "ऑडिट लॉग"
+  },
+
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "error": "कुछ गलत हो गया",
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "back": "वापस",
+    "next": "अगला",
+    "submit": "जमा करें",
+    "edit": "संपादित करें",
+    "delete": "हटाएं",
+    "view": "विवरण देखें",
+    "price_per_qtl": "₹{{price}}/क्विं",
+    "qty_qtl": "{{qty}} क्विं",
+    "district": "जिला",
+    "state": "राज्य",
+    "season": "मौसम",
+    "grade": "ग्रेड",
+    "organic": "जैविक",
+    "not_organic": "गैर-जैविक",
+    "verified": "सत्यापित",
+    "unverified": "असत्यापित",
+    "yes": "हाँ",
+    "no": "नहीं",
+    "na": "N/A",
+    "inr": "₹{{amount}}",
+    "pagination_info": "{{total}} में से {{from}}–{{to}} दिखाया जा रहा है",
+    "no_data": "कोई डेटा उपलब्ध नहीं",
+    "language": "भाषा"
+  },
+
+  "logistics": {
+    "title": "नजदीकी परिवहन और भंडारण",
+    "type_transport": "परिवहन",
+    "type_cold_storage": "शीत भंडारण",
+    "contact": "संपर्क",
+    "address": "पता",
+    "no_options": "इस लॉट के पास कोई लॉजिस्टिक्स विकल्प नहीं मिला।"
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "app_name": "KisanSetu",
+  "tagline": "Connecting Farmers Directly with Buyers",
+  "govt_label": "Government of Maharashtra Initiative",
+
+  "nav": {
+    "dashboard": "Dashboard",
+    "my_lots": "My Lots",
+    "create_lot": "List Produce",
+    "search_lots": "Browse Lots",
+    "my_offers": "My Offers",
+    "my_deals": "My Deals",
+    "disputes": "Disputes",
+    "admin": "Admin Panel",
+    "prices": "Market Prices",
+    "logout": "Logout",
+    "profile": "Profile"
+  },
+
+  "auth": {
+    "login_title": "Login to KisanSetu",
+    "login_subtitle": "Enter your mobile number to continue",
+    "mobile_label": "Mobile Number",
+    "mobile_placeholder": "10-digit mobile number",
+    "role_label": "I am a",
+    "role_farmer": "Farmer",
+    "role_buyer": "Buyer / Trader",
+    "role_admin": "Government Admin",
+    "send_otp": "Send OTP",
+    "sending": "Sending...",
+    "otp_sent": "OTP sent to {{mobile}}",
+    "otp_label": "Enter OTP",
+    "otp_placeholder": "6-digit OTP",
+    "verify_otp": "Verify & Login",
+    "verifying": "Verifying...",
+    "resend_otp": "Resend OTP",
+    "dev_otp_hint": "Dev mode: OTP is {{otp}}",
+    "name_label": "Full Name",
+    "name_placeholder": "Your full name",
+    "welcome_back": "Welcome back, {{name}}!",
+    "kyc_required": "Complete Aadhaar e-KYC to continue"
+  },
+
+  "kyc": {
+    "title": "Aadhaar e-KYC Verification",
+    "subtitle": "Your Aadhaar number is used for identity verification only — never stored.",
+    "aadhaar_label": "Aadhaar Number",
+    "aadhaar_placeholder": "12-digit Aadhaar number",
+    "verify_btn": "Verify Identity",
+    "verifying": "Verifying...",
+    "success": "Identity verified successfully!",
+    "already_verified": "Already verified",
+    "skip": "Skip for now"
+  },
+
+  "business_proof": {
+    "title": "Business Verification",
+    "subtitle": "Upload your business proof to start making offers",
+    "type_label": "Proof Type",
+    "url_label": "Document URL / File Link",
+    "url_placeholder": "https://...",
+    "submit": "Submit for Verification",
+    "submitting": "Submitting...",
+    "success": "Business proof submitted! You are now a Verified Buyer.",
+    "types": {
+      "GST_CERTIFICATE": "GST Certificate",
+      "MANDI_LICENCE": "Mandi Licence",
+      "EXPORT_LICENCE": "Export Licence",
+      "FPO_REGISTRATION": "FPO Registration"
+    }
+  },
+
+  "farmer": {
+    "dashboard_title": "Farmer Dashboard",
+    "welcome": "Welcome, {{name}}",
+    "active_lots": "Active Lots",
+    "pending_offers": "Pending Offers",
+    "active_deals": "Active Deals",
+    "earnings": "Total Earnings",
+    "create_lot_btn": "List New Produce",
+    "no_lots": "No lots listed yet. Start by listing your produce.",
+    "lot_status": {
+      "ACTIVE": "Active",
+      "LOCKED": "Deal In Progress",
+      "CLOSED": "Sold",
+      "WITHDRAWN": "Withdrawn"
+    }
+  },
+
+  "lot": {
+    "create_title": "List Your Produce",
+    "edit_title": "Edit Lot",
+    "commodity_label": "Commodity",
+    "commodity_placeholder": "e.g. Wheat, Onion, Soybean",
+    "variety_label": "Variety",
+    "variety_placeholder": "e.g. HD-2967, Nasik Red",
+    "grade_label": "Grade",
+    "quantity_label": "Quantity (Quintals)",
+    "asking_price_label": "Asking Price (₹ / Quintal)",
+    "district_label": "District",
+    "season_label": "Season",
+    "harvest_date_label": "Harvest Date",
+    "organic_label": "Organic Produce",
+    "photo_label": "Photo URL",
+    "submit_btn": "Publish Lot",
+    "update_btn": "Update Lot",
+    "withdraw_btn": "Withdraw Lot",
+    "msp_reference": "Govt. MSP Reference: ₹{{price}}/qtl",
+    "mandi_reference": "Mandi Price Today: ₹{{price}}/qtl",
+    "price_recommendation": "Market Insight",
+    "grades": { "A": "Grade A (Best)", "B": "Grade B", "C": "Grade C" },
+    "seasons": { "kharif": "Kharif", "rabi": "Rabi", "zaid": "Zaid" },
+    "organic_badge": "Organic",
+    "view_offers": "View Offers ({{count}})",
+    "no_offers": "No offers yet"
+  },
+
+  "buyer": {
+    "dashboard_title": "Buyer Dashboard",
+    "search_placeholder": "Search by commodity, district...",
+    "filter_btn": "Filters",
+    "verified_badge": "Verified Buyer",
+    "unverified_notice": "Complete verification to make offers and view farmer contacts.",
+    "offers_made": "Offers Made",
+    "active_deals": "Active Deals"
+  },
+
+  "offer": {
+    "make_offer": "Make an Offer",
+    "your_price": "Your Offer Price (₹/qtl)",
+    "message": "Message to Farmer",
+    "message_placeholder": "Optional — describe your requirements",
+    "submit": "Submit Offer",
+    "accept": "Accept Offer",
+    "reject": "Reject",
+    "counter": "Counter Offer",
+    "counter_price": "Your Counter Price (₹/qtl)",
+    "govt_ref": "Govt. Reference Price: ₹{{price}}/qtl",
+    "status": {
+      "PENDING": "Pending",
+      "ACCEPTED": "Accepted",
+      "REJECTED": "Rejected",
+      "COUNTERED": "Countered",
+      "EXPIRED": "Expired"
+    }
+  },
+
+  "deal": {
+    "title": "Deal Details",
+    "token": "Deal Token",
+    "token_hint": "Show this token at physical pickup to confirm handoff",
+    "confirm_handoff": "Confirm Handoff",
+    "quantity_confirmed": "Confirmed Quantity (Quintals)",
+    "grade_confirmed": "Confirmed Grade",
+    "handoff_window": "Handoff Window",
+    "status": {
+      "CONFIRMED": "Confirmed — Awaiting Handoff",
+      "FARMER_CONFIRMED": "Farmer Confirmed — Awaiting Buyer",
+      "BUYER_CONFIRMED": "Buyer Confirmed — Awaiting Farmer",
+      "COMPLETED": "Completed",
+      "DISPUTED": "Under Dispute",
+      "CANCELLED": "Cancelled",
+      "FLAGGED": "Flagged for Review"
+    },
+    "escrow_held": "Escrow held: ₹{{amount}}",
+    "escrow_released": "Payment released: ₹{{amount}}"
+  },
+
+  "dispute": {
+    "raise_btn": "Raise Dispute",
+    "title": "Dispute Details",
+    "reason_label": "Reason",
+    "description_label": "Description",
+    "evidence_label": "Evidence URL (photo/document)",
+    "submit_btn": "Submit Dispute",
+    "resolve_btn": "Resolve Dispute",
+    "resolution_label": "Resolution Notes",
+    "action_label": "Action",
+    "actions": {
+      "RELEASE_ESCROW": "Release to Farmer",
+      "REFUND_BUYER": "Refund Buyer",
+      "PARTIAL_RELEASE": "Partial Settlement"
+    },
+    "status": {
+      "OPEN": "Open",
+      "UNDER_REVIEW": "Under Review",
+      "RESOLVED": "Resolved",
+      "CLOSED": "Closed"
+    }
+  },
+
+  "price": {
+    "title": "Market Price Intelligence",
+    "commodity_label": "Commodity",
+    "region_label": "Region",
+    "days_label": "Period",
+    "msp_line": "MSP",
+    "mandi_line": "Mandi Price",
+    "trend_up": "↑ Trending Up",
+    "trend_down": "↓ Trending Down",
+    "trend_stable": "→ Stable"
+  },
+
+  "admin": {
+    "dashboard_title": "Government Admin Dashboard",
+    "total_farmers": "Total Farmers",
+    "total_buyers": "Total Buyers",
+    "active_lots": "Active Lots",
+    "total_deals": "Total Deals",
+    "completed_deals": "Completed Deals",
+    "open_disputes": "Open Disputes",
+    "transaction_volume": "Transaction Volume",
+    "avg_realisation": "Avg. Farmer Realisation",
+    "fraud_flags": "Fraud / Anomaly Flags",
+    "fraud_desc": "Buyers repeatedly offering below 90% of MSP",
+    "resolve_dispute": "Resolve",
+    "view_audit": "Audit Log"
+  },
+
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View Details",
+    "price_per_qtl": "₹{{price}}/qtl",
+    "qty_qtl": "{{qty}} qtl",
+    "district": "District",
+    "state": "State",
+    "season": "Season",
+    "grade": "Grade",
+    "organic": "Organic",
+    "not_organic": "Non-Organic",
+    "verified": "Verified",
+    "unverified": "Not Verified",
+    "yes": "Yes",
+    "no": "No",
+    "na": "N/A",
+    "inr": "₹{{amount}}",
+    "pagination_info": "Showing {{from}}–{{to}} of {{total}}",
+    "no_data": "No data available",
+    "language": "Language"
+  },
+
+  "logistics": {
+    "title": "Nearby Transport & Storage",
+    "type_transport": "Transport",
+    "type_cold_storage": "Cold Storage",
+    "contact": "Contact",
+    "address": "Address",
+    "no_options": "No logistics options found near this lot."
+  }
+}
