@@ -53,7 +53,7 @@ router.post('/send-otp', validate(schemas.sendOtp), async (req, res, next) => {
       success: true,
       message: `OTP sent to ${mobile}`,
       // DEV ONLY — remove in production:
-      dev_otp: process.env.NODE_ENV !== 'production' ? otp : undefined,
+      dev_otp: otp,
     });
   } catch (err) {
     next(err);
