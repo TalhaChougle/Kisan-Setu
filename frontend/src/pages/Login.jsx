@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { auth as authApi } from '../api/client';
@@ -10,48 +10,83 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const [step, setStep]       = useState('mobile');   // mobile | otp
-  const [role, setRole]       = useState('FARMER');
-  const [mobile, setMobile]   = useState('');
-  const [otp, setOtp]         = useState('');
-  const [name, setName]       = useState('');
-  const [devOtp, setDevOtp]   = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState('');
-  const [info, setInfo]       = useState('');
+  const [step, setStep]           = useState('mobile');
+  const [role, setRole]           = useState('FARMER');
+  const [mobile, setMobile]       = useState('');
+  const [otp, setOtp]             = useState('');
+  const [name, setName]           = useState('');
+  const [devOtp, setDevOtp]       = useState('');
+  const [loading, setLoading]     = useState(false);
+  const [loadingMsg, setLoadingMsg] = useState('');
+  const [error, setError]         = useState('');
+  const [info, setInfo]           = useState('');
+  const [backendReady, setBackendReady] = useState(false);
 
-  // Admin uses password login
-  const [adminPwd, setAdminPwd] = useState('');
+  const [adminPwd, setAdminPwd]   = useState('');
+
+  // Pre-warm the backend as soon as the login page loads
+  useEffect(() => {
+    let cancelled = false;
+    async function warmUp() {
+      try {
+        await fetch(`${import.meta.env.VITE_API_URL?.replace('/api', '') || ''}/health`);
+        if (!cancelled) setBackendReady(true);
+      } catch {
+        // silent — will retry on actual request
+      }
+    }
+    warmUp();
+    return () => { cancelled = true; };
+  }, []);
+
+  async function sendOtpWithRetry(payload, retries = 3) {
+    for (let i = 0; i < retries; i++) {
+      try {
+        if (i > 0) setLoadingMsg(`Server is waking up... attempt ${i + 1} of ${retries}`);
+        const res = await authApi.sendOtp(payload);
+        return res;
+      } catch (err) {
+        const isTimeout = err.code === 'ECONNABORTED' || err.message?.includes('timeout');
+        const isNetwork = err.message?.includes('Network Error');
+        if ((isTimeout || isNetwork) && i < retries - 1) {
+          setLoadingMsg(`Server warming up, retrying... (${i + 2}/${retries})`);
+          await new Promise(r => setTimeout(r, 3000));
+          continue;
+        }
+        throw err;
+      }
+    }
+  }
 
   async function handleSendOtp(e) {
     e.preventDefault();
-    setError(''); setInfo('');
+    setError(''); setInfo(''); setLoadingMsg('Sending OTP...');
     if (!/^[6-9]\d{9}$/.test(mobile)) {
       setError('Enter a valid 10-digit Indian mobile number.');
       return;
     }
     setLoading(true);
     try {
-      const { data } = await authApi.sendOtp({ mobile, role });
+      if (!backendReady) setLoadingMsg('Waking up server (first request takes ~15s)...');
+      const { data } = await sendOtpWithRetry({ mobile, role });
       setDevOtp(data.dev_otp || '');
       setInfo(t('auth.otp_sent', { mobile }));
       setStep('otp');
     } catch (err) {
-      setError(err.response?.data?.message || t('common.error'));
+      setError(err.response?.data?.message || 'Could not reach server. Please try again.');
     } finally {
       setLoading(false);
+      setLoadingMsg('');
     }
   }
 
   async function handleVerifyOtp(e) {
     e.preventDefault();
-    setError('');
+    setError(''); setLoadingMsg('Verifying...');
     setLoading(true);
     try {
       const { data } = await authApi.verifyOtp({ mobile, otp, role, name: name || undefined });
       login(data.token, data.user);
-
-      // Route based on onboarding state
       if (data.user.role === 'FARMER') {
         if (!data.user.aadhaar_verified) return navigate('/kyc');
         return navigate('/farmer/dashboard');
@@ -62,16 +97,16 @@ export default function Login() {
         return navigate('/buyer/dashboard');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid OTP');
+      setError(err.response?.data?.message || 'Invalid OTP. Please try again.');
     } finally {
       setLoading(false);
+      setLoadingMsg('');
     }
   }
 
   async function handleAdminLogin(e) {
     e.preventDefault();
-    setError('');
-    setLoading(true);
+    setError(''); setLoading(true); setLoadingMsg('Logging in...');
     try {
       const { data } = await authApi.adminLogin({ mobile, password: adminPwd });
       login(data.token, data.user);
@@ -80,6 +115,7 @@ export default function Login() {
       setError(err.response?.data?.message || 'Invalid credentials');
     } finally {
       setLoading(false);
+      setLoadingMsg('');
     }
   }
 
@@ -99,8 +135,22 @@ export default function Login() {
 
           {error && <Alert type="error" message={error} onClose={() => setError('')} />}
           {info  && <Alert type="info"  message={info}  onClose={() => setInfo('')}  />}
+
+          {/* OTP banner */}
           {devOtp && (
-            <Alert type="warning" message={`🔧 ${t('auth.dev_otp_hint', { otp: devOtp })}`} />
+            <div className="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-4 mb-4 text-center">
+              <p className="text-xs text-yellow-700 font-medium uppercase tracking-wide mb-1">Your OTP</p>
+              <p className="text-4xl font-bold font-mono text-yellow-800 tracking-widest">{devOtp}</p>
+              <p className="text-xs text-yellow-600 mt-1">Enter this code below to login</p>
+            </div>
+          )}
+
+          {/* Loading state */}
+          {loading && loadingMsg && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 flex items-center gap-3">
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-300 border-t-blue-600 flex-shrink-0" />
+              <p className="text-sm text-blue-700">{loadingMsg}</p>
+            </div>
           )}
 
           {/* Role selector */}
@@ -133,18 +183,19 @@ export default function Login() {
           {role === 'ADMIN' ? (
             <form onSubmit={handleAdminLogin}>
               <div className="mb-4">
-                <label className="label">{t('auth.mobile_label')}</label>
-                <input className="input" type="tel" placeholder="Admin mobile" value={mobile} onChange={e => setMobile(e.target.value)} required />
+                <label className="label">Mobile</label>
+                <input className="input" type="tel" placeholder="9000000000" value={mobile} onChange={e => setMobile(e.target.value)} required />
               </div>
-              <div className="mb-5">
+              <div className="mb-2">
                 <label className="label">Password</label>
-                <input className="input" type="password" placeholder="Admin password" value={adminPwd} onChange={e => setAdminPwd(e.target.value)} required />
-                <p className="text-xs text-gray-500 mt-1">Default: admin@123 (mobile: 9000000000)</p>
+                <input className="input" type="password" placeholder="admin@123" value={adminPwd} onChange={e => setAdminPwd(e.target.value)} required />
               </div>
+              <p className="text-xs text-gray-400 mb-4 text-center">Default: mobile 9000000000 / password admin@123</p>
               <button type="submit" className="btn-primary w-full" disabled={loading}>
-                {loading ? t('auth.verifying') : 'Login as Admin'}
+                {loading ? loadingMsg || 'Logging in...' : 'Login as Admin'}
               </button>
             </form>
+
           ) : step === 'mobile' ? (
             <form onSubmit={handleSendOtp}>
               <div className="mb-4">
@@ -161,21 +212,19 @@ export default function Login() {
                     required
                   />
                 </div>
+                <p className="text-xs text-gray-400 mt-1">
+                  {role === 'FARMER' ? 'Demo: 9111111111' : 'Demo: 9222222221'}
+                </p>
               </div>
-              {!mobile.match(/^[6-9]\d{9}$/) && role === 'FARMER' && (
-                <p className="text-xs text-gray-500 mb-3">Try: 9111111111 (seeded farmer)</p>
-              )}
-              {!mobile.match(/^[6-9]\d{9}$/) && role === 'BUYER' && (
-                <p className="text-xs text-gray-500 mb-3">Try: 9222222221 (seeded buyer)</p>
-              )}
               <div className="mb-5">
-                <label className="label">{t('auth.name_label')} <span className="text-gray-400 font-normal">(optional for new users)</span></label>
+                <label className="label">{t('auth.name_label')} <span className="text-gray-400 font-normal">(new users only)</span></label>
                 <input className="input" type="text" placeholder={t('auth.name_placeholder')} value={name} onChange={e => setName(e.target.value)} />
               </div>
               <button type="submit" className="btn-primary w-full" disabled={loading}>
-                {loading ? t('auth.sending') : t('auth.send_otp')}
+                {loading ? (loadingMsg || 'Sending...') : t('auth.send_otp')}
               </button>
             </form>
+
           ) : (
             <form onSubmit={handleVerifyOtp}>
               <p className="text-sm text-gray-600 mb-4">{t('auth.otp_sent', { mobile: `+91 ${mobile}` })}</p>
@@ -193,7 +242,7 @@ export default function Login() {
                 />
               </div>
               <button type="submit" className="btn-primary w-full mb-3" disabled={loading || otp.length < 6}>
-                {loading ? t('auth.verifying') : t('auth.verify_otp')}
+                {loading ? (loadingMsg || 'Verifying...') : t('auth.verify_otp')}
               </button>
               <button type="button" className="btn-secondary w-full text-sm" onClick={() => { setStep('mobile'); setOtp(''); setDevOtp(''); }}>
                 ← Change Mobile

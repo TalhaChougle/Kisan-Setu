@@ -15,14 +15,22 @@ client.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle auth errors globally
+// Handle auth errors globally + auto-retry on network errors
 client.interceptors.response.use(
   (res) => res,
-  (err) => {
+  async (err) => {
+    const config = err.config;
     if (err.response?.status === 401) {
       localStorage.removeItem('kisansetu_token');
       localStorage.removeItem('kisansetu_user');
       window.location.href = '/login';
+      return Promise.reject(err);
+    }
+    // Auto-retry once on timeout or network error (backend cold start)
+    if (!config._retried && (err.code === 'ECONNABORTED' || !err.response)) {
+      config._retried = true;
+      await new Promise(r => setTimeout(r, 4000));
+      return client(config);
     }
     return Promise.reject(err);
   }
